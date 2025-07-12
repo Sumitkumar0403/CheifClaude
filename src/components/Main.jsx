@@ -4,7 +4,7 @@ import ClaudeRecipe from "./ClaudeRecipe";
 import IngredientsList from "./IngredientsList";
 import { getRecipeFromGPT } from "./Ai";
 import { ToastContainer, toast } from 'react-toastify';
-import { CiEdit } from "react-icons/ci";
+import "../App.css"
 
 function Main() {
   const [ingredients, setIngredients] = React.useState([]);
