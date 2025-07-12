@@ -38,6 +38,34 @@ function Main() {
     formel.reset();
   }
 
+  function handleInputChange(event) {
+    const value = event.target.value;
+    
+    // Check if comma is typed
+    if (value.includes(',')) {
+      const parts = value.split(',').map(part => part.trim()).filter(part => part.length > 0);
+      
+      // Process each ingredient separately
+      parts.forEach(ingredient => {
+        const normalizedIngredient = ingredient.toLowerCase();
+        
+        // Check if ingredient already exists (case-insensitive)
+        const isDuplicate = ingredients.some(existing => 
+          existing.toLowerCase() === normalizedIngredient
+        );
+        
+        if (isDuplicate) {
+          toast.error(`${ingredient} already added!`);
+        } else {
+          setIngredients((arr) => [...arr, ingredient]);
+        }
+      });
+      
+      // Clear the input field
+      event.target.value = '';
+    }
+  }
+
   async function handleChange() {
 
     console.log("Ingredients:", ingredients);
@@ -75,6 +103,29 @@ function Main() {
               placeholder={`Start typing...${ingredients.length < 4  ? "(Enter at least 4 ingredients)" : ""}`}
               id="ingredient"
               name="ingredient"
+              onChange={handleInputChange}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  const value = e.target.value.trim();
+                  if (value) {
+                    const normalizedIngredient = value.toLowerCase();
+                    
+                    // Check if ingredient already exists (case-insensitive)
+                    const isDuplicate = ingredients.some(existing => 
+                      existing.toLowerCase() === normalizedIngredient
+                    );
+                    
+                    if (isDuplicate) {
+                      toast.error("Ingredient already added!");
+                    } else {
+                      setIngredients((arr) => [...arr, value]);
+                    }
+                    
+                    e.target.value = '';
+                  }
+                }
+              }}
             />
             <button
               id="ingredient"
